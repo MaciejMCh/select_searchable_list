@@ -23,19 +23,25 @@ class SelectSearchableListExample extends StatefulWidget {
   });
 
   @override
-  State<SelectSearchableListExample> createState() => _SelectSearchableListExampleState();
+  State<SelectSearchableListExample> createState() =>
+      _SelectSearchableListExampleState();
 }
 
-class _SelectSearchableListExampleState extends State<SelectSearchableListExample> {
+class _SelectSearchableListExampleState
+    extends State<SelectSearchableListExample> {
   /// This is list of city which will pass to the drop down.
 
   /// This is register text field controllers.
-  final TextEditingController _productNameTextEditingController = TextEditingController();
-  final TextEditingController _categoryTextEditingController = TextEditingController();
-  final TextEditingController _colorsTextEditingController = TextEditingController();
+  final TextEditingController _productNameTextEditingController =
+      TextEditingController();
+  final TextEditingController _categoryTextEditingController =
+      TextEditingController();
+  final TextEditingController _colorsTextEditingController =
+      TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GlobalKey<DropDownTextFieldState> _dropDownKey = GlobalKey<DropDownTextFieldState>();
+  final GlobalKey<DropDownTextFieldState> _dropDownKey =
+      GlobalKey<DropDownTextFieldState>();
 
   late Map<int, String> _listCategories = {};
   late final List<int> _selectedCategoryValue = [];
@@ -48,9 +54,29 @@ class _SelectSearchableListExampleState extends State<SelectSearchableListExampl
     super.initState();
 
     Future.delayed(const Duration(seconds: 5), () {
-      _listColors = {1: 'Black', 2: 'Blue', 3: 'Brown', 4: 'Gold', 5: 'Green', 6: 'Grey', 7: 'Orange', 8: 'Pink', 9: 'Purple', 10: 'Red'};
+      _listColors = {
+        1: 'Black',
+        2: 'Blue',
+        3: 'Brown',
+        4: 'Gold',
+        5: 'Green',
+        6: 'Grey',
+        7: 'Orange',
+        8: 'Pink',
+        9: 'Purple',
+        10: 'Red'
+      };
 
-      _listCategories = {1: 'Boot', 2: 'Casual', 3: 'Flat', 4: 'Flip', 5: 'Lace up', 6: 'Loafer', 7: 'Slip-on', 8: 'Moccasins'};
+      _listCategories = {
+        1: 'Boot',
+        2: 'Casual',
+        3: 'Flat',
+        4: 'Flip',
+        5: 'Lace up',
+        6: 'Loafer',
+        7: 'Slip-on',
+        8: 'Moccasins'
+      };
 
       //_selectedColorValues = [2, 4];
 
@@ -128,7 +154,9 @@ class _SelectSearchableListExampleState extends State<SelectSearchableListExampl
 
               // ####### Category Select List
               DropDownTextField(
+                itemStyle: const TextStyle(),
                 key: _dropDownKey,
+                bottomSheetTitle: const Text('Category'),
                 //style: const TextStyle(height: 0.85, fontSize: 14.0, color: Colors.deepOrangeAccent), //initial
                 textEditingController: _categoryTextEditingController,
                 title: 'Category',
@@ -160,6 +188,8 @@ class _SelectSearchableListExampleState extends State<SelectSearchableListExampl
               ),
               // ####### Colors Select List
               DropDownTextField(
+                itemStyle: const TextStyle(),
+                bottomSheetTitle: const Text('Colors'),
                 textEditingController: _colorsTextEditingController,
                 title: 'Colors',
                 hint: 'Select Colors',
@@ -181,18 +211,19 @@ class _SelectSearchableListExampleState extends State<SelectSearchableListExampl
                     _formKey.currentState!.save();
 
                     print('Update button pressed');
-                  }
-                  else {
+                  } else {
                     // Programmatically tap the drop down field
                     _dropDownKey.currentState?.onTextFieldTap();
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  textStyle: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 child: const Text(
                   'Update',
-                  style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.normal),
+                  style:
+                      TextStyle(fontSize: 14.0, fontWeight: FontWeight.normal),
                 ),
               ),
             ],

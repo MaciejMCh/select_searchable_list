@@ -60,8 +60,9 @@ class DropDown {
 
 class DropDownState {
   DropDown dropDown;
+  TextStyle itemStyle;
 
-  DropDownState(this.dropDown);
+  DropDownState(this.dropDown, {required this.itemStyle});
 
   /// This gives the bottom sheet widget.
   void showModal(context) {
@@ -74,7 +75,10 @@ class DropDownState {
       builder: (context) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
-            return MainBody(dropDown: dropDown);
+            return MainBody(
+              dropDown: dropDown,
+              itemStyle: itemStyle,
+            );
           },
         );
       },
@@ -85,8 +89,13 @@ class DropDownState {
 /// This is main class to display the bottom sheet body.
 class MainBody extends StatefulWidget {
   final DropDown dropDown;
+  final TextStyle itemStyle;
 
-  const MainBody({required this.dropDown, super.key});
+  const MainBody({
+    required this.dropDown,
+    required this.itemStyle,
+    super.key,
+  });
 
   @override
   State<MainBody> createState() => _MainBodyState();
@@ -124,18 +133,18 @@ class _MainBodyState extends State<MainBody> {
             ),
             //SizedBox(height: 13),
             Padding(
-              padding: EdgeInsets.only(
-                  left: 13.0,
-                  right: 13.0,
-                  top: 21.0,
-                  bottom:
-                      (widget.dropDown.enableMultipleSelection) ? 0.0 : 13.0),
+              padding: const EdgeInsets.only(
+                left: 13.0,
+                right: 13.0,
+                top: 10.0,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   /// Bottom sheet title text
                   Expanded(
-                      child: widget.dropDown.bottomSheetTitle ?? Container()),
+                    child: widget.dropDown.bottomSheetTitle ?? Container(),
+                  ),
 
                   /// Done button
                   Visibility(
@@ -165,6 +174,7 @@ class _MainBodyState extends State<MainBody> {
                   AppTextField(
                     dropDown: widget.dropDown,
                     onTextChanged: _buildSearchList,
+                    inputTextStyle: widget.itemStyle,
                   ),
             ),
 
@@ -188,6 +198,7 @@ class _MainBodyState extends State<MainBody> {
                             _onUnFocusKeyboardAndPop();
                           },
                     child: Container(
+                      height: 44,
                       color: widget.dropDown.dropDownBackgroundColor,
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(13, 0, 13, 0),
@@ -195,6 +206,7 @@ class _MainBodyState extends State<MainBody> {
                           title: widget.dropDown.listBuilder?.call(index) ??
                               Text(
                                 mainListValues[index],
+                                style: widget.itemStyle,
                               ),
                           trailing: widget.dropDown.enableMultipleSelection
                               ? GestureDetector(

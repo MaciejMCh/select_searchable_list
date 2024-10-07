@@ -10,10 +10,15 @@ The AppTextField widget is implemented using a TextFormField widget and a TextEd
 * */
 class AppTextField extends StatefulWidget {
   final DropDown dropDown;
+  final TextStyle inputTextStyle;
   final Function(String) onTextChanged;
 
-  const AppTextField(
-      {required this.dropDown, required this.onTextChanged, super.key});
+  const AppTextField({
+    required this.dropDown,
+    required this.onTextChanged,
+    required this.inputTextStyle,
+    super.key,
+  });
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -25,19 +30,20 @@ class _AppTextFieldState extends State<AppTextField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(12.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: TextFormField(
         controller: _editingController,
         cursorColor: Colors.black,
         onChanged: (value) {
           widget.onTextChanged(value);
         },
+        style: widget.inputTextStyle,
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.black12,
           contentPadding:
               const EdgeInsets.only(left: 0, bottom: 0, top: 0, right: 15),
-          hintText: 'Search',
+          hintText: 'Szukaj',
           border: const OutlineInputBorder(
             borderSide: BorderSide(
               width: 0,

@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'drop_down.dart';
 
@@ -13,6 +15,7 @@ The DropDownTextField widget also has a selectedOptions parameter that can be us
 * */
 class DropDownTextField extends StatefulWidget {
   final TextEditingController textEditingController;
+  final Widget bottomSheetTitle;
   final String? title;
   final String hint;
   final Map<int, String> options;
@@ -31,6 +34,7 @@ class DropDownTextField extends StatefulWidget {
   final bool? enable;
   final bool isRequired;
   final TextStyle? style;
+  final TextStyle itemStyle;
   final StrutStyle? strutStyle;
   final TextDirection? textDirection;
   final TextAlign? textAlign;
@@ -54,6 +58,8 @@ class DropDownTextField extends StatefulWidget {
     this.selectedOptions,
     this.onChanged,
     this.multiple = false,
+    required this.bottomSheetTitle,
+    required this.itemStyle,
 
     /// optional parameters
     this.submitTitle,
@@ -94,14 +100,7 @@ class DropDownTextFieldState extends State<DropDownTextField> {
   void onTextFieldTap() {
     DropDownState(
       DropDown(
-        bottomSheetTitle: Text(
-          widget.title ?? '',
-          style: widget.style ??
-              const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20.0,
-              ),
-        ),
+        bottomSheetTitle: widget.bottomSheetTitle,
         submitButtonChild: Text(
           widget.submitTitle ?? 'Done',
           style: const TextStyle(
@@ -119,6 +118,7 @@ class DropDownTextFieldState extends State<DropDownTextField> {
         enableMultipleSelection: widget.multiple,
         isSearchVisible: widget.isSearchVisible,
       ),
+      itemStyle: widget.itemStyle,
     ).showModal(context);
   }
 
@@ -164,49 +164,57 @@ class DropDownTextFieldState extends State<DropDownTextField> {
           validator: widget.validator,
           decoration: widget.decoration ??
               InputDecoration(
-                      filled: true,
-                      fillColor: widget.backgroundColor ?? Colors.white,
-                      hintStyle: TextStyle(color: widget.borderColor ?? Colors.grey.shade300),
+                filled: true,
+                fillColor: widget.backgroundColor ?? Colors.white,
+                hintStyle: TextStyle(
+                    color: widget.borderColor ?? Colors.grey.shade300),
 
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(4.0),
-                        borderSide: BorderSide(color: widget.borderColor ?? Colors.grey.shade300, width: 1.0, style: BorderStyle.solid),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4.0),
-                          borderSide:
-                          BorderSide(color: widget.primaryColor ?? Colors.black , width: 1.0, style: BorderStyle.solid)),
-                      // labelStyle: const TextStyle(color: AmirHomePalette.errorColor), // Color when not focused
-                      // floatingLabelStyle: TextStyle(color: AmirHomePalette.primaryColor), // Color when focused
-                      // labelText: widget.title,
-                      label: RichText(
-                            text: TextSpan(
-                              text: widget.title,
-                              style: TextStyle(
-                                color: widget.primaryColor ?? Colors.black,
-                              ),
-                              children: [
-                                widget.isRequired
-                                    ? const TextSpan(
-                                        text: ' *',
-                                        style: TextStyle(
-                                          color: Colors.red,
-                                        ),
-                                      )
-                                    : const TextSpan(),
-                              ],
-                            ),
-                          ),
-                      hintText: widget.hint,
-                      suffixIcon: const Padding(
-                        padding: EdgeInsets.only(top: 8), // add padding to adjust icon
-                        child: Icon(Icons.keyboard_arrow_down),
-                      ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(4.0),
+                  borderSide: BorderSide(
+                      color: widget.borderColor ?? Colors.grey.shade300,
+                      width: 1.0,
+                      style: BorderStyle.solid),
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(4.0),
+                    borderSide: BorderSide(
+                        color: widget.primaryColor ?? Colors.black,
+                        width: 1.0,
+                        style: BorderStyle.solid)),
+                // labelStyle: const TextStyle(color: AmirHomePalette.errorColor), // Color when not focused
+                // floatingLabelStyle: TextStyle(color: AmirHomePalette.primaryColor), // Color when focused
+                // labelText: widget.title,
+                label: RichText(
+                  text: TextSpan(
+                    text: widget.title,
+                    style: TextStyle(
+                      color: widget.primaryColor ?? Colors.black,
                     ),
+                    children: [
+                      widget.isRequired
+                          ? const TextSpan(
+                              text: ' *',
+                              style: TextStyle(
+                                color: Colors.red,
+                              ),
+                            )
+                          : const TextSpan(),
+                    ],
+                  ),
+                ),
+                hintText: widget.hint,
+                suffixIcon: const Padding(
+                  padding:
+                      EdgeInsets.only(top: 8), // add padding to adjust icon
+                  child: Icon(Icons.keyboard_arrow_down),
+                ),
+              ),
           textCapitalization:
               widget.textCapitalization ?? TextCapitalization.none,
           textInputAction: widget.textInputAction,
-          style: widget.style ?? const TextStyle(height: 0.85, fontSize: 14.0), //initial
+          style: widget.style ??
+              const TextStyle(height: 0.85, fontSize: 14.0), //initial
           strutStyle: widget.strutStyle,
           textDirection: widget.textDirection,
           textAlign: widget.textAlign ?? TextAlign.start,
