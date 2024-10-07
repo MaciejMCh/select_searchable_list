@@ -61,8 +61,13 @@ class DropDown {
 class DropDownState {
   DropDown dropDown;
   TextStyle itemStyle;
+  TextStyle selectedItemStyle;
 
-  DropDownState(this.dropDown, {required this.itemStyle});
+  DropDownState(
+    this.dropDown, {
+    required this.itemStyle,
+    required this.selectedItemStyle,
+  });
 
   /// This gives the bottom sheet widget.
   void showModal(context) {
@@ -78,6 +83,7 @@ class DropDownState {
             return MainBody(
               dropDown: dropDown,
               itemStyle: itemStyle,
+              selectedItemStyle: selectedItemStyle,
             );
           },
         );
@@ -90,10 +96,12 @@ class DropDownState {
 class MainBody extends StatefulWidget {
   final DropDown dropDown;
   final TextStyle itemStyle;
+  final TextStyle selectedItemStyle;
 
   const MainBody({
     required this.dropDown,
     required this.itemStyle,
+    required this.selectedItemStyle,
     super.key,
   });
 
@@ -206,7 +214,9 @@ class _MainBodyState extends State<MainBody> {
                           title: widget.dropDown.listBuilder?.call(index) ??
                               Text(
                                 mainListValues[index],
-                                style: widget.itemStyle,
+                                style: isSelected
+                                    ? widget.selectedItemStyle
+                                    : widget.itemStyle,
                               ),
                           trailing: widget.dropDown.enableMultipleSelection
                               ? GestureDetector(

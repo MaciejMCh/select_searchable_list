@@ -35,6 +35,7 @@ class DropDownTextField extends StatefulWidget {
   final bool isRequired;
   final TextStyle? style;
   final TextStyle itemStyle;
+  final TextStyle selectedItemStyle;
   final StrutStyle? strutStyle;
   final TextDirection? textDirection;
   final TextAlign? textAlign;
@@ -60,6 +61,7 @@ class DropDownTextField extends StatefulWidget {
     this.multiple = false,
     required this.bottomSheetTitle,
     required this.itemStyle,
+    required this.selectedItemStyle,
 
     /// optional parameters
     this.submitTitle,
@@ -119,6 +121,7 @@ class DropDownTextFieldState extends State<DropDownTextField> {
         isSearchVisible: widget.isSearchVisible,
       ),
       itemStyle: widget.itemStyle,
+      selectedItemStyle: widget.selectedItemStyle,
     ).showModal(context);
   }
 

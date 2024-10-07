@@ -155,6 +155,7 @@ class _SelectSearchableListExampleState
               // ####### Category Select List
               DropDownTextField(
                 itemStyle: const TextStyle(),
+                selectedItemStyle: const TextStyle(),
                 key: _dropDownKey,
                 bottomSheetTitle: const Text('Category'),
                 //style: const TextStyle(height: 0.85, fontSize: 14.0, color: Colors.deepOrangeAccent), //initial
@@ -189,6 +190,7 @@ class _SelectSearchableListExampleState
               // ####### Colors Select List
               DropDownTextField(
                 itemStyle: const TextStyle(),
+                selectedItemStyle: const TextStyle(),
                 bottomSheetTitle: const Text('Colors'),
                 textEditingController: _colorsTextEditingController,
                 title: 'Colors',
