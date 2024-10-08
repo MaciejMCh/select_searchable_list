@@ -176,6 +176,7 @@ class _SelectSearchableListExampleState
                   });
                    */
                 },
+                onOpened: (_) {},
                 // isRequired: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -201,6 +202,7 @@ class _SelectSearchableListExampleState
                   // setState(() => selectedIds);
                   // print(selectedIds);
                 },
+                onOpened: (_) {},
                 multiple: true,
               ),
               const SizedBox(

@@ -70,7 +70,8 @@ class DropDownState {
   });
 
   /// This gives the bottom sheet widget.
-  void showModal(context) {
+  void showModal(context, Function(bool) onOpened) {
+    onOpened(true);
     showModalBottomSheet(
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
@@ -88,7 +89,9 @@ class DropDownState {
           },
         );
       },
-    );
+    ).then((_) {
+      onOpened(false);
+    });
   }
 }
 
@@ -153,24 +156,6 @@ class _MainBodyState extends State<MainBody> {
                   Expanded(
                     child: widget.dropDown.bottomSheetTitle ?? Container(),
                   ),
-
-                  /// Done button
-                  Visibility(
-                    visible: widget.dropDown.enableMultipleSelection,
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Material(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            widget.dropDown.selectedItems?.call(selectedList);
-                            _onUnFocusKeyboardAndPop();
-                          },
-                          child: widget.dropDown.submitButtonChild ??
-                              const Text('Done'),
-                        ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -199,7 +184,14 @@ class _MainBodyState extends State<MainBody> {
 
                   return InkWell(
                     onTap: widget.dropDown.enableMultipleSelection
-                        ? null
+                        ? () {
+                            !isSelected
+                                ? selectedList.add(mainListKeys[index])
+                                : selectedList.remove(mainListKeys[index]);
+                            setState(() {
+                              //selectedList;
+                            });
+                          }
                         : () {
                             widget.dropDown.selectedItems
                                 ?.call([mainListKeys[index]]);
@@ -219,21 +211,14 @@ class _MainBodyState extends State<MainBody> {
                                     : widget.itemStyle,
                               ),
                           trailing: widget.dropDown.enableMultipleSelection
-                              ? GestureDetector(
-                                  onTap: () {
-                                    !isSelected
-                                        ? selectedList.add(mainListKeys[index])
-                                        : selectedList
-                                            .remove(mainListKeys[index]);
-                                    setState(() {
-                                      //selectedList;
-                                    });
-                                  },
-                                  child: isSelected
-                                      ? const Icon(Icons.check_box)
-                                      : const Icon(
-                                          Icons.check_box_outline_blank),
-                                )
+                              ? isSelected
+                                  ? Icon(
+                                      Icons.check_box,
+                                      color: widget.selectedItemStyle.color,
+                                    )
+                                  : const Icon(
+                                      Icons.check_box_outline_blank,
+                                    )
                               : const SizedBox(
                                   height: 0.0,
                                   width: 0.0,

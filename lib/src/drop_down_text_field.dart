@@ -21,6 +21,7 @@ class DropDownTextField extends StatefulWidget {
   final Map<int, String> options;
   final List<int>? selectedOptions;
   final Function(List<int>?)? onChanged;
+  final Function(bool isOpen) onOpened;
   final bool multiple;
   // FormFieldValidator<T>? validator
   final FormFieldValidator<String>? validator;
@@ -58,6 +59,7 @@ class DropDownTextField extends StatefulWidget {
     required this.options,
     this.selectedOptions,
     this.onChanged,
+    required this.onOpened,
     this.multiple = false,
     required this.bottomSheetTitle,
     required this.itemStyle,
@@ -122,7 +124,7 @@ class DropDownTextFieldState extends State<DropDownTextField> {
       ),
       itemStyle: widget.itemStyle,
       selectedItemStyle: widget.selectedItemStyle,
-    ).showModal(context);
+    ).showModal(context, widget.onOpened);
   }
 
   @override
