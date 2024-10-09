@@ -156,6 +156,7 @@ class _SelectSearchableListExampleState
               DropDownTextField(
                 itemStyle: const TextStyle(),
                 selectedItemStyle: const TextStyle(),
+                barrierOpacity: 0.1,
                 key: _dropDownKey,
                 bottomSheetTitle: const Text('Category'),
                 //style: const TextStyle(height: 0.85, fontSize: 14.0, color: Colors.deepOrangeAccent), //initial
@@ -193,6 +194,7 @@ class _SelectSearchableListExampleState
                 itemStyle: const TextStyle(),
                 selectedItemStyle: const TextStyle(),
                 bottomSheetTitle: const Text('Colors'),
+                barrierOpacity: 0.1,
                 textEditingController: _colorsTextEditingController,
                 title: 'Colors',
                 hint: 'Select Colors',

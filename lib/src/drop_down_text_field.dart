@@ -22,6 +22,7 @@ class DropDownTextField extends StatefulWidget {
   final List<int>? selectedOptions;
   final Function(List<int>?)? onChanged;
   final Function(bool isOpen) onOpened;
+  final double barrierOpacity;
   final bool multiple;
   // FormFieldValidator<T>? validator
   final FormFieldValidator<String>? validator;
@@ -64,6 +65,7 @@ class DropDownTextField extends StatefulWidget {
     required this.bottomSheetTitle,
     required this.itemStyle,
     required this.selectedItemStyle,
+    required this.barrierOpacity,
 
     /// optional parameters
     this.submitTitle,
@@ -124,7 +126,7 @@ class DropDownTextFieldState extends State<DropDownTextField> {
       ),
       itemStyle: widget.itemStyle,
       selectedItemStyle: widget.selectedItemStyle,
-    ).showModal(context, widget.onOpened);
+    ).showModal(context, widget.onOpened, widget.barrierOpacity);
   }
 
   @override

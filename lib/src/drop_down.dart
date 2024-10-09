@@ -70,9 +70,14 @@ class DropDownState {
   });
 
   /// This gives the bottom sheet widget.
-  void showModal(context, Function(bool) onOpened) {
+  void showModal(
+    context,
+    Function(bool) onOpened,
+    double barrierOpacity,
+  ) {
     onOpened(true);
     showModalBottomSheet(
+      barrierColor: Colors.black.withOpacity(barrierOpacity),
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(15.0)),
