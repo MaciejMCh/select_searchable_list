@@ -71,7 +71,7 @@ class DropDownState {
 
   /// This gives the bottom sheet widget.
   void showModal(
-    context,
+    BuildContext context,
     Function(bool) onOpened,
     double barrierOpacity,
   ) {

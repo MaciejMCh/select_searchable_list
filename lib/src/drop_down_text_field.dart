@@ -21,7 +21,7 @@ class DropDownTextField extends StatefulWidget {
   final Map<int, String> options;
   final List<int>? selectedOptions;
   final Function(List<int>?)? onChanged;
-  final Function(bool isOpen) onOpened;
+  final Function(bool isOpen)? onOpened;
   final double barrierOpacity;
   final bool multiple;
   // FormFieldValidator<T>? validator
@@ -29,8 +29,9 @@ class DropDownTextField extends StatefulWidget {
 
   //optional parameters
   final String? submitTitle;
-  final FocusNode? focusNode;
-  final InputDecoration? decoration;
+  // final FocusNode? focusNode;
+  final InputDecoration decoration;
+  final InputDecoration focusedDecoration;
   final TextCapitalization? textCapitalization;
   final TextInputAction? textInputAction;
   final bool? enable;
@@ -52,6 +53,8 @@ class DropDownTextField extends StatefulWidget {
   /// by default it is [True] so widget will be visible.
   final bool isSearchVisible;
 
+  final bool isReadOnly;
+
   const DropDownTextField({
     super.key,
     required this.textEditingController,
@@ -60,8 +63,9 @@ class DropDownTextField extends StatefulWidget {
     required this.options,
     this.selectedOptions,
     this.onChanged,
-    required this.onOpened,
+    this.onOpened,
     this.multiple = false,
+    required this.isReadOnly,
     required this.bottomSheetTitle,
     required this.itemStyle,
     required this.selectedItemStyle,
@@ -69,9 +73,10 @@ class DropDownTextField extends StatefulWidget {
 
     /// optional parameters
     this.submitTitle,
-    this.focusNode,
+    // this.focusNode,
     this.validator,
-    this.decoration,
+    required this.decoration,
+    required this.focusedDecoration,
     this.textCapitalization,
     this.textInputAction,
     this.enable,
@@ -100,10 +105,21 @@ class DropDownTextField extends StatefulWidget {
 }
 
 class DropDownTextFieldState extends State<DropDownTextField> {
+  late final _focusNode = FocusNode();
+  var _isFocused = false;
   // final TextEditingController _searchTextEditingController = TextEditingController();
 
   /// This is on text changed method which will display on city text field on changed.
   void onTextFieldTap() {
+    if (!widget.isReadOnly && !_isFocused) {
+      setState(() {
+        _isFocused = true;
+      });
+    }
+    if (widget.isReadOnly) {
+      return;
+    }
+    _focusNode.unfocus();
     DropDownState(
       DropDown(
         bottomSheetTitle: widget.bottomSheetTitle,
@@ -126,11 +142,29 @@ class DropDownTextFieldState extends State<DropDownTextField> {
       ),
       itemStyle: widget.itemStyle,
       selectedItemStyle: widget.selectedItemStyle,
-    ).showModal(context, widget.onOpened, widget.barrierOpacity);
+    ).showModal(
+      context,
+      (isOpened) {
+        if (!isOpened) {
+          _focusNode.requestFocus();
+        }
+        widget.onOpened?.call(isOpened);
+      },
+      widget.barrierOpacity,
+    );
+  }
+
+  void _handleFocusChange() {
+    if (!_focusNode.hasFocus && !widget.isReadOnly) {
+      setState(() {
+        _isFocused = false;
+      });
+    }
   }
 
   @override
   void initState() {
+    _focusNode.addListener(_handleFocusChange);
     renewValue();
     super.initState();
   }
@@ -162,61 +196,13 @@ class DropDownTextFieldState extends State<DropDownTextField> {
           showCursor: false,
           readOnly: true,
           enabled: widget.enable ?? true,
-          focusNode: widget.focusNode ?? FocusNode(),
+          focusNode: _focusNode,
           onTap: () {
-            FocusScope.of(context).unfocus();
             onTextFieldTap();
           },
           // Optional
           validator: widget.validator,
-          decoration: widget.decoration ??
-              InputDecoration(
-                filled: true,
-                fillColor: widget.backgroundColor ?? Colors.white,
-                hintStyle: TextStyle(
-                    color: widget.borderColor ?? Colors.grey.shade300),
-
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(4.0),
-                  borderSide: BorderSide(
-                      color: widget.borderColor ?? Colors.grey.shade300,
-                      width: 1.0,
-                      style: BorderStyle.solid),
-                ),
-                focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4.0),
-                    borderSide: BorderSide(
-                        color: widget.primaryColor ?? Colors.black,
-                        width: 1.0,
-                        style: BorderStyle.solid)),
-                // labelStyle: const TextStyle(color: AmirHomePalette.errorColor), // Color when not focused
-                // floatingLabelStyle: TextStyle(color: AmirHomePalette.primaryColor), // Color when focused
-                // labelText: widget.title,
-                label: RichText(
-                  text: TextSpan(
-                    text: widget.title,
-                    style: TextStyle(
-                      color: widget.primaryColor ?? Colors.black,
-                    ),
-                    children: [
-                      widget.isRequired
-                          ? const TextSpan(
-                              text: ' *',
-                              style: TextStyle(
-                                color: Colors.red,
-                              ),
-                            )
-                          : const TextSpan(),
-                    ],
-                  ),
-                ),
-                hintText: widget.hint,
-                suffixIcon: const Padding(
-                  padding:
-                      EdgeInsets.only(top: 8), // add padding to adjust icon
-                  child: Icon(Icons.keyboard_arrow_down),
-                ),
-              ),
+          decoration: _isFocused ? widget.focusedDecoration : widget.decoration,
           textCapitalization:
               widget.textCapitalization ?? TextCapitalization.none,
           textInputAction: widget.textInputAction,
@@ -231,6 +217,13 @@ class DropDownTextFieldState extends State<DropDownTextField> {
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    _focusNode.removeListener(_handleFocusChange);
+    _focusNode.dispose();
+    super.dispose();
   }
 
   // Comma separated values of options
